@@ -9,10 +9,3 @@ export interface Movie {
   release_date: string;
   vote_average: number;
 }
-
-export interface SearchResponse {
-  page: number;
-  total_pages: number;
-  total_results: number;
-  results: Movie[];
-}

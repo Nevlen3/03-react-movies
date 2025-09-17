@@ -6,23 +6,15 @@ export interface SearchBarProps {
   onSubmit: (query: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
-  // Обработка через FormData
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const query = String(formData.get('query') || '').trim();
-
+export default function SearchBar({ onSubmit }: SearchBarProps) {
+  async function handleSubmit(formData: FormData) {
+    const query = formData.get('query')?.toString().trim() ?? '';
     if (!query) {
       toast.error('Please enter your search query.');
       return;
     }
-
     onSubmit(query);
-
-    form.reset();
-  };
+  }
 
   return (
     <header className={styles.header}>
@@ -35,8 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
         >
           Powered by TMDB
         </a>
-
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
+        <form className={styles.form} action={handleSubmit}>
           <input
             className={styles.input}
             type="text"
@@ -44,7 +35,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
             autoComplete="off"
             placeholder="Search movies..."
             autoFocus
-            aria-label="Search movies"
           />
           <button className={styles.button} type="submit">
             Search
@@ -53,6 +43,4 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
       </div>
     </header>
   );
-};
-
-export default SearchBar;
+}
